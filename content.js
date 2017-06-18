@@ -40,6 +40,20 @@ var panelsHTML = `
 </div>
 </section>
 </div>
+<div class="col-lg-3">
+<section id="current-year" class="panel panel-default">
+<header class="panel-heading"></header>
+<div class="panel-body">
+</div>
+</section>
+</div>
+<div class="col-lg-3">
+<section id="prev-year" class="panel panel-default">
+<header class="panel-heading"></header>
+<div class="panel-body">
+</div>
+</section>
+</div>
 </div>
 `;
 
@@ -52,6 +66,8 @@ var navButton = $('#nav > section > section > div > div.slim-scroll > nav > ul >
 	$('#current-month > header').text(monthNames[month] + ' ' + year + ' Revenue');
 	$('#prev-month-1 > header').text(monthNames[getPreviousMonth(month, 1)] + ' ' + year + ' Revenue');
 	$('#prev-month-2 > header').text(monthNames[getPreviousMonth(month, 2)] + ' ' + year + ' Revenue');
+	$('#current-year > header').text(year + ' Revenue');
+	$('#prev-year > header').text((year - 1) + ' Revenue');
 	getScripts();
 });
 
@@ -86,6 +102,8 @@ function appendRevenue(name, logs) {
 		let prevMonth1 = 0;
 		let prevMonth2 = 0;
 		let prevMonth3 = 0;
+		let currYear = 0;
+		let prevYear = 0;
 		$.each(logs, function(key, value) {
 			if (value.status !== "REVERSED") {
 				let amount = Number(value.amount);
@@ -99,6 +117,11 @@ function appendRevenue(name, logs) {
 				} else if (value.time.includes(monthNamesShort[getPreviousMonth(month, 3)] + ' ' + year)) {
 					prevMonth3 += amount;
 				}
+				if (value.time.includes(year)) {
+					currYear += amount;
+				} else if (value.time.includes(year - 1)) {
+					prevYear += amount;
+				}
 			}
 		});
 		let currMonthAvg = currMonth / today.getDate();
@@ -109,6 +132,8 @@ function appendRevenue(name, logs) {
 		$('#current-month > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + currMonth.toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(currMonthAvg, prevMonth1Avg) + '</span></p>');
 		$('#prev-month-1 > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + prevMonth1.toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(prevMonth1Avg, prevMonth2Avg) + '</span></p>');
 		$('#prev-month-2 > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + prevMonth2.toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(prevMonth2Avg, prevMonth3Avg) + '</span></p>');
+		$('#current-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + currYear.toFixed(2) + '</span></p>');
+		$('#prev-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + prevYear.toFixed(2) + '</span></p>');
 	}
 }
 
