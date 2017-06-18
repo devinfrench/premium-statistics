@@ -101,7 +101,7 @@ function appendRevenue(name, logs) {
 				}
 			}
 		});
-		let currMonthAvg = currMonth / daysInMonth(month, year);
+		let currMonthAvg = currMonth / today.getDate();
 		let prevMonth1Avg = prevMonth1 / daysInMonth(getPreviousMonth(month, 1), year);
 		let prevMonth2Avg = prevMonth2 / daysInMonth(getPreviousMonth(month, 2), year);
 		let prevMonth3Avg = prevMonth3 / daysInMonth(getPreviousMonth(month, 3), year);
