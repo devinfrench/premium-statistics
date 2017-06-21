@@ -14,8 +14,9 @@ var panelsHTML = `
 <div class="row">
 <div class="col-lg-3">
 <section id="total-rev" class="panel panel-default">
-<header class="panel-heading"><b>Total Revenue:</b> $<span>0</span></header>
+<header class="panel-heading">Total Revenue</header>
 <div class="panel-body">
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -23,6 +24,7 @@ var panelsHTML = `
 <section id="current-month" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -30,6 +32,7 @@ var panelsHTML = `
 <section id="prev-month-1" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -37,6 +40,7 @@ var panelsHTML = `
 <section id="prev-month-2" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -44,6 +48,7 @@ var panelsHTML = `
 <section id="current-year" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -51,6 +56,7 @@ var panelsHTML = `
 <section id="prev-year" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -63,11 +69,11 @@ scripterPanelNav.append(navButtonHTML);
 var navButton = $('#nav > section > section > div > div.slim-scroll > nav > ul > li > ul > li:nth-child(5) > a').click(function() {
 	$('#content > section > header > p').html('<i class="fa fa-code"></i> Scripter Panel | Premium Statistics');
 	$('#content > section > section').html(panelsHTML);
-	$('#current-month > header').html('<b>' + monthNames[month] + ' ' + year + ' Revenue:</b> $<span>0</span>');
-	$('#prev-month-1 > header').html('<b>' + monthNames[getPreviousMonth(month, 1)] + ' ' + year + ' Revenue:</b> $<span>0</span>');
-	$('#prev-month-2 > header').html('<b>' + monthNames[getPreviousMonth(month, 2)] + ' ' + year + ' Revenue:</b> $<span>0</span>');
-	$('#current-year > header').html('<b>' + year + ' Revenue:</b> $<span>0</span>');
-	$('#prev-year > header').html('<b>' + (year - 1) + ' Revenue:</b> $<span>0</span>');
+	$('#current-month > header').text(monthNames[month] + ' ' + year + ' Revenue');
+	$('#prev-month-1 > header').text(monthNames[getPreviousMonth(month, 1)] + ' ' + year + ' Revenue');
+	$('#prev-month-2 > header').text(monthNames[getPreviousMonth(month, 2)] + ' ' + year + ' Revenue');
+	$('#current-year > header').text(year + ' Revenue');
+	$('#prev-year > header').text((year - 1) + ' Revenue');
 	getScripts();
 });
 
@@ -135,12 +141,12 @@ function appendRevenue(name, logs) {
 		$('#current-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + currYear.toFixed(2) + '</span></p>');
 		$('#prev-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + prevYear.toFixed(2) + '</span></p>');
 		
-		$('#total-rev > header > span').text((Number($('#total-rev > header > span').text()) + total).toFixed(2));
-		$('#current-month > header > span').text((Number($('#current-month > header > span').text()) + currMonth).toFixed(2));
-		$('#prev-month-1 > header > span').text((Number($('#prev-month-1 > header > span').text()) + prevMonth1).toFixed(2));
-		$('#prev-month-2 > header > span').text((Number($('#prev-month-2 > header > span').text()) + prevMonth2).toFixed(2));
-		$('#current-year > header > span').text((Number($('#current-year > header > span').text()) + currYear).toFixed(2));
-		$('#prev-year > header > span').text((Number($('#prev-year > header > span').text()) + prevYear).toFixed(2));
+		$('#total-rev > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#total-rev > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + total).toFixed(2));
+		$('#current-month > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#current-month > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + currMonth).toFixed(2));
+		$('#prev-month-1 > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#prev-month-1 > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + prevMonth1).toFixed(2));
+		$('#prev-month-2 > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#prev-month-2 > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + prevMonth2).toFixed(2));
+		$('#current-year > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#current-year > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + currYear).toFixed(2));
+		$('#prev-year > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#prev-year > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + prevYear).toFixed(2));
 	}
 }
 
