@@ -12,7 +12,7 @@ var navButtonHTML = `<li>
 
 var panelsHTML = `
 <div class="row">
-<div class="col-lg-3">
+<div class="col-lg-4">
 <section id="total-rev" class="panel panel-default">
 <header class="panel-heading">Total Revenue</header>
 <div class="panel-body">
@@ -20,31 +20,7 @@ var panelsHTML = `
 </div>
 </section>
 </div>
-<div class="col-lg-3">
-<section id="current-month" class="panel panel-default">
-<header class="panel-heading"></header>
-<div class="panel-body">
-<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
-</div>
-</section>
-</div>
-<div class="col-lg-3">
-<section id="prev-month-1" class="panel panel-default">
-<header class="panel-heading"></header>
-<div class="panel-body">
-<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
-</div>
-</section>
-</div>
-<div class="col-lg-3">
-<section id="prev-month-2" class="panel panel-default">
-<header class="panel-heading"></header>
-<div class="panel-body">
-<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
-</div>
-</section>
-</div>
-<div class="col-lg-3">
+<div class="col-lg-4">
 <section id="current-year" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
@@ -52,8 +28,32 @@ var panelsHTML = `
 </div>
 </section>
 </div>
-<div class="col-lg-3">
+<div class="col-lg-4">
 <section id="prev-year" class="panel panel-default">
+<header class="panel-heading"></header>
+<div class="panel-body">
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
+</div>
+</section>
+</div>
+<div class="col-lg-4">
+<section id="current-month" class="panel panel-default">
+<header class="panel-heading"></header>
+<div class="panel-body">
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
+</div>
+</section>
+</div>
+<div class="col-lg-4">
+<section id="prev-month-1" class="panel panel-default">
+<header class="panel-heading"></header>
+<div class="panel-body">
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
+</div>
+</section>
+</div>
+<div class="col-lg-4">
+<section id="prev-month-2" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
 <p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
