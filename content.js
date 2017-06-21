@@ -14,7 +14,7 @@ var panelsHTML = `
 <div class="row">
 <div class="col-lg-3">
 <section id="total-rev" class="panel panel-default">
-<header class="panel-heading">Total Revenue</header>
+<header class="panel-heading"><b>Total Revenue:</b> $<span>0</span></header>
 <div class="panel-body">
 </div>
 </section>
@@ -63,11 +63,11 @@ scripterPanelNav.append(navButtonHTML);
 var navButton = $('#nav > section > section > div > div.slim-scroll > nav > ul > li > ul > li:nth-child(5) > a').click(function() {
 	$('#content > section > header > p').html('<i class="fa fa-code"></i> Scripter Panel | Premium Statistics');
 	$('#content > section > section').html(panelsHTML);
-	$('#current-month > header').text(monthNames[month] + ' ' + year + ' Revenue');
-	$('#prev-month-1 > header').text(monthNames[getPreviousMonth(month, 1)] + ' ' + year + ' Revenue');
-	$('#prev-month-2 > header').text(monthNames[getPreviousMonth(month, 2)] + ' ' + year + ' Revenue');
-	$('#current-year > header').text(year + ' Revenue');
-	$('#prev-year > header').text((year - 1) + ' Revenue');
+	$('#current-month > header').html('<b>' + monthNames[month] + ' ' + year + ' Revenue:</b> $<span>0</span>');
+	$('#prev-month-1 > header').html('<b>' + monthNames[getPreviousMonth(month, 1)] + ' ' + year + ' Revenue:</b> $<span>0</span>');
+	$('#prev-month-2 > header').html('<b>' + monthNames[getPreviousMonth(month, 2)] + ' ' + year + ' Revenue:</b> $<span>0</span>');
+	$('#current-year > header').html('<b>' + year + ' Revenue:</b> $<span>0</span>');
+	$('#prev-year > header').html('<b>' + (year - 1) + ' Revenue:</b> $<span>0</span>');
 	getScripts();
 });
 
@@ -134,6 +134,13 @@ function appendRevenue(name, logs) {
 		$('#prev-month-2 > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + prevMonth2.toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(prevMonth2Avg, prevMonth3Avg) + '</span></p>');
 		$('#current-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + currYear.toFixed(2) + '</span></p>');
 		$('#prev-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + prevYear.toFixed(2) + '</span></p>');
+		
+		$('#total-rev > header > span').text((Number($('#total-rev > header > span').text()) + total).toFixed(2));
+		$('#current-month > header > span').text((Number($('#current-month > header > span').text()) + currMonth).toFixed(2));
+		$('#prev-month-1 > header > span').text((Number($('#prev-month-1 > header > span').text()) + prevMonth1).toFixed(2));
+		$('#prev-month-2 > header > span').text((Number($('#prev-month-2 > header > span').text()) + prevMonth2).toFixed(2));
+		$('#current-year > header > span').text((Number($('#current-year > header > span').text()) + currYear).toFixed(2));
+		$('#prev-year > header > span').text((Number($('#prev-year > header > span').text()) + prevYear).toFixed(2));
 	}
 }
 
