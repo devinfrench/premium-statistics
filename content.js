@@ -131,9 +131,9 @@ function appendRevenue(name, logs) {
 			}
 		});
 		let currMonthAvg = currMonth / today.getDate();
-		let prevMonth1Avg = prevMonth1 / daysInMonth(getPreviousMonth(month, 1), year);
-		let prevMonth2Avg = prevMonth2 / daysInMonth(getPreviousMonth(month, 2), year);
-		let prevMonth3Avg = prevMonth3 / daysInMonth(getPreviousMonth(month, 3), year);
+		let prevMonth1Avg = prevMonth1 / getDaysInMonth(getPreviousMonth(month, 1), year);
+		let prevMonth2Avg = prevMonth2 / getDaysInMonth(getPreviousMonth(month, 2), year);
+		let prevMonth3Avg = prevMonth3 / getDaysInMonth(getPreviousMonth(month, 3), year);
 		$('#total-rev > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + total.toFixed(2) + '</span></p>');
 		$('#current-month > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + currMonth.toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(currMonthAvg, prevMonth1Avg) + '</span></p>');
 		$('#prev-month-1 > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + prevMonth1.toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(prevMonth1Avg, prevMonth2Avg) + '</span></p>');
@@ -155,7 +155,7 @@ function getPreviousMonth(current, amount) {
 	return diff < 0 ? 12 + diff : diff;
 }
 
-function daysInMonth(month, year) {
+function getDaysInMonth(month, year) {
 	return new Date(year, month, 0).getDate();
 }
 
