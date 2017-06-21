@@ -18,7 +18,7 @@ const PANELS_HTML = `
 <section id="total" class="panel panel-default">
 <header class="panel-heading">Total Revenue</header>
 <div class="panel-body">
-<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="total">0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -26,7 +26,7 @@ const PANELS_HTML = `
 <section id="curr-year" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
-<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="curr-year">0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -34,7 +34,7 @@ const PANELS_HTML = `
 <section id="prev-year" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
-<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="prev-year">0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -42,7 +42,7 @@ const PANELS_HTML = `
 <section id="curr-month" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
-<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="curr-month">0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -50,7 +50,7 @@ const PANELS_HTML = `
 <section id="prev-month" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
-<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="prev-month">0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -58,7 +58,7 @@ const PANELS_HTML = `
 <section id="prev-prev-month" class="panel panel-default">
 <header class="panel-heading"></header>
 <div class="panel-body">
-<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span>0</span></b></span></p>
+<p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="prev-prev-month">0</span></b></span></p>
 </div>
 </section>
 </div>
@@ -142,12 +142,12 @@ function appendRevenue(name, logs) {
 		$('#curr-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + currYear.toFixed(2) + '</span></p>');
 		$('#prev-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + prevYear.toFixed(2) + '</span></p>');
 		
-		$('#total > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#total-rev > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + total).toFixed(2));
-		$('#curr-month > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#current-month > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + currMonth).toFixed(2));
-		$('#prev-month > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#prev-month-1 > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + prevMonth).toFixed(2));
-		$('#prev-prev-month > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#prev-month-2 > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + prevPrevMonth).toFixed(2));
-		$('#curr-year > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#current-year > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + currYear).toFixed(2));
-		$('#prev-year > div > p:nth-child(1) > span:nth-child(2) > b > span').text((Number($('#prev-year > div > p:nth-child(1) > span:nth-child(2) > b > span').text()) + prevYear).toFixed(2));
+		$('span[data-overall=total]').text((Number($('span[data-overall=total]').text()) + total).toFixed(2));
+		$('span[data-overall=curr-month]').text((Number($('span[data-overall=curr-month]').text()) + currMonth).toFixed(2));
+		$('span[data-overall=prev-month]').text((Number($('span[data-overall=prev-month]').text()) + prevMonth).toFixed(2));
+		$('span[data-overall=prev-prev-month]').text((Number($('span[data-overall=prev-prev-month]').text()) + prevPrevMonth).toFixed(2));
+		$('span[data-overall=curr-year]').text((Number($('span[data-overall=curr-year]').text()) + currYear).toFixed(2));
+		$('span[data-overall=prev-year]').text((Number($('span[data-overall=prev-year]').text()) + prevYear).toFixed(2));
 	}
 }
 
