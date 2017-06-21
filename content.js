@@ -3,7 +3,6 @@ const MONTH_NAMES_ABBREV = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Au
 const TODAY = new Date();
 const CURRENT_MONTH = TODAY.getMonth();
 const CURRENT_YEAR = TODAY.getFullYear();
-
 const NAV_LIST_ITEM_HTML = `
 <li>
 <a id="premium-statistics" href="javascript:void(0)">
@@ -11,7 +10,6 @@ const NAV_LIST_ITEM_HTML = `
 </a>
 </li>
 `;
-
 const PANELS_HTML = `
 <div class="row">
 <div class="col-lg-4">
@@ -103,51 +101,52 @@ function getPurchaseLogs(data) {
 }
 
 function appendRevenue(name, logs) {
+	let script = {
+		name: name,
+		total: 0
+	};
+
+	for (let i = CURRENT_YEAR - 1; i <= CURRENT_YEAR ; i++) {
+		script[i] = {
+			total: 0,
+			monthly: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	}
+
 	if (logs.length > 2) {
-		let total = 0;
-		let currMonth = 0;
-		let prevMonth = 0;
-		let prevPrevMonth = 0;
-		let prevPrevPrevMonth = 0;
-		let currYear = 0;
-		let prevYear = 0;
 		$.each(logs, function(key, value) {
 			if (value.status !== "REVERSED") {
 				let amount = Number(value.amount);
-				total += amount;
-				if (value.time.includes(MONTH_NAMES_ABBREV[CURRENT_MONTH] + ' ' + CURRENT_YEAR)) {
-					currMonth += amount;
-				} else if (value.time.includes(MONTH_NAMES_ABBREV[getPreviousMonth(CURRENT_MONTH, 1)] + ' ' + CURRENT_YEAR)) {
-					prevMonth += amount;
-				} else if (value.time.includes(MONTH_NAMES_ABBREV[getPreviousMonth(CURRENT_MONTH, 2)] + ' ' + CURRENT_YEAR)) {
-					prevPrevMonth += amount;
-				} else if (value.time.includes(MONTH_NAMES_ABBREV[getPreviousMonth(CURRENT_MONTH, 3)] + ' ' + CURRENT_YEAR)) {
-					prevPrevPrevMonth += amount;
-				}
-				if (value.time.includes(CURRENT_YEAR)) {
-					currYear += amount;
-				} else if (value.time.includes(CURRENT_YEAR - 1)) {
-					prevYear += amount;
+				script.total += amount;
+				for (let i = CURRENT_YEAR - 1; i <= CURRENT_YEAR ; i++) {
+					for (let j = 0; j < MONTH_NAMES_ABBREV.length; j++) {
+						if (value.time.includes(MONTH_NAMES_ABBREV[j] + ' ' + i)) {
+							script[i].monthly[j] += amount;
+							script[i].total += amount;
+						}
+					}
 				}
 			}
 		});
-		let currMonthAvg = currMonth / TODAY.getDate();
-		let prevMonthAvg = prevMonth / getDaysInMonth(getPreviousMonth(CURRENT_MONTH, 1), CURRENT_YEAR);
-		let prevPrevMonthAvg = prevPrevMonth / getDaysInMonth(getPreviousMonth(CURRENT_MONTH, 2), CURRENT_YEAR);
-		let prevPrevPrevMonthAvg = prevPrevPrevMonth / getDaysInMonth(getPreviousMonth(CURRENT_MONTH, 3), CURRENT_YEAR);
-		$('#total > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + total.toFixed(2) + '</span></p>');
-		$('#curr-month > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + currMonth.toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(currMonthAvg, prevMonthAvg) + '</span></p>');
-		$('#prev-month > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + prevMonth.toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(prevMonthAvg, prevPrevMonthAvg) + '</span></p>');
-		$('#prev-prev-month > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + prevPrevMonth.toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(prevPrevMonthAvg, prevPrevPrevMonthAvg) + '</span></p>');
-		$('#curr-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + currYear.toFixed(2) + '</span></p>');
-		$('#prev-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + prevYear.toFixed(2) + '</span></p>');
+
+
+		let currMonthAvg = script[CURRENT_YEAR].monthly[CURRENT_MONTH] / TODAY.getDate();
+		let prevMonthAvg = script[CURRENT_YEAR].monthly[getPreviousMonth(CURRENT_MONTH, 1)] / getDaysInMonth(getPreviousMonth(CURRENT_MONTH, 1), CURRENT_YEAR);
+		let prevPrevMonthAvg = script[CURRENT_YEAR].monthly[getPreviousMonth(CURRENT_MONTH, 2)]  / getDaysInMonth(getPreviousMonth(CURRENT_MONTH, 2), CURRENT_YEAR);
+		let prevPrevPrevMonthAvg = script[CURRENT_YEAR].monthly[getPreviousMonth(CURRENT_MONTH, 3)]  / getDaysInMonth(getPreviousMonth(CURRENT_MONTH, 3), CURRENT_YEAR);
+		$('#total > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + script.total.toFixed(2) + '</span></p>');
+		$('#curr-month > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + script[CURRENT_YEAR].monthly[CURRENT_MONTH].toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(currMonthAvg, prevMonthAvg) + '</span></p>');
+		$('#prev-month > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + script[CURRENT_YEAR].monthly[getPreviousMonth(CURRENT_MONTH, 1)].toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(prevMonthAvg, prevPrevMonthAvg) + '</span></p>');
+		$('#prev-prev-month > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-3">$' + script[CURRENT_YEAR].monthly[getPreviousMonth(CURRENT_MONTH, 2)].toFixed(2) + '</span><span class="col-lg-3">' + getPercentChange(prevPrevMonthAvg, prevPrevPrevMonthAvg) + '</span></p>');
+		$('#curr-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + script[CURRENT_YEAR].total.toFixed(2) + '</span></p>');
+		$('#prev-year > div').append('<p style="padding-bottom: 15px;"><span class="col-lg-6">' + name + '</span><span class="col-lg-6">$' + script[CURRENT_YEAR - 1].total.toFixed(2) + '</span></p>');
 		
-		$('span[data-overall=total]').text((Number($('span[data-overall=total]').text()) + total).toFixed(2));
-		$('span[data-overall=curr-month]').text((Number($('span[data-overall=curr-month]').text()) + currMonth).toFixed(2));
-		$('span[data-overall=prev-month]').text((Number($('span[data-overall=prev-month]').text()) + prevMonth).toFixed(2));
-		$('span[data-overall=prev-prev-month]').text((Number($('span[data-overall=prev-prev-month]').text()) + prevPrevMonth).toFixed(2));
-		$('span[data-overall=curr-year]').text((Number($('span[data-overall=curr-year]').text()) + currYear).toFixed(2));
-		$('span[data-overall=prev-year]').text((Number($('span[data-overall=prev-year]').text()) + prevYear).toFixed(2));
+		$('span[data-overall=total]').text((Number($('span[data-overall=total]').text()) + script.total).toFixed(2));
+		$('span[data-overall=curr-month]').text((Number($('span[data-overall=curr-month]').text()) + script[CURRENT_YEAR].monthly[CURRENT_MONTH]).toFixed(2));
+		$('span[data-overall=prev-month]').text((Number($('span[data-overall=prev-month]').text()) + script[CURRENT_YEAR].monthly[getPreviousMonth(CURRENT_MONTH, 1)]).toFixed(2));
+		$('span[data-overall=prev-prev-month]').text((Number($('span[data-overall=prev-prev-month]').text()) + script[CURRENT_YEAR].monthly[getPreviousMonth(CURRENT_MONTH, 2)]).toFixed(2));
+		$('span[data-overall=curr-year]').text((Number($('span[data-overall=curr-year]').text()) + script[CURRENT_YEAR].total).toFixed(2));
+		$('span[data-overall=prev-year]').text((Number($('span[data-overall=prev-year]').text()) + script[CURRENT_YEAR - 1].total).toFixed(2));
 	}
 }
 
