@@ -161,5 +161,5 @@ function getDaysInMonth(month, year) {
 
 function getPercentChange(curr, prev) {
 	let percent = curr / prev;
-	return percent > 1.0 ? '<span style="color: green;">+' + ((percent / 1) * 100).toFixed(0) + '%</span>' : '<span style="color: red;">-' + ((1 - percent) * 100).toFixed(0) + '%</span>';
+	return percent > 1.0 ? '<span style="color: green;">+' + ((percent - 1) * 100).toFixed(0) + '%</span>' : '<span style="color: red;">-' + ((1 - percent) * 100).toFixed(0) + '%</span>';
 }
