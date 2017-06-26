@@ -129,6 +129,13 @@ function appendRevenue(name, logs) {
 			}
 		});
 
+		// Round all monthly values to 2 decimal places for chart
+		for (let i = CURRENT_YEAR - 1; i <= CURRENT_YEAR ; i++) {
+			for (let j = 0; j < MONTH_NAMES_ABBREV.length; j++) {
+				script[i].monthly[j] = Number(script[i].monthly[j].toFixed(2));
+			}
+		}
+
 
 		let currMonthAvg = script[CURRENT_YEAR].monthly[CURRENT_MONTH] / TODAY.getDate();
 		let prevMonthAvg = script[CURRENT_YEAR].monthly[getPreviousMonth(CURRENT_MONTH, 1)] / getDaysInMonth(getPreviousMonth(CURRENT_MONTH, 1), CURRENT_YEAR);
@@ -147,7 +154,51 @@ function appendRevenue(name, logs) {
 		$('span[data-overall=prev-prev-month]').text((Number($('span[data-overall=prev-prev-month]').text()) + script[CURRENT_YEAR].monthly[getPreviousMonth(CURRENT_MONTH, 2)]).toFixed(2));
 		$('span[data-overall=curr-year]').text((Number($('span[data-overall=curr-year]').text()) + script[CURRENT_YEAR].total).toFixed(2));
 		$('span[data-overall=prev-year]').text((Number($('span[data-overall=prev-year]').text()) + script[CURRENT_YEAR - 1].total).toFixed(2));
+
+		appendChart(script);
 	}
+}
+
+function appendChart(script) {
+	let chartId = script.name.replace(' ', '') + 'Chart';
+	let panel = `<div class="col-lg-6">
+	<section class="panel panel-default">
+	<header class="panel-heading">` + script.name + `</header>
+	<div class="panel-body">
+	<canvas id="` + chartId + `"></canvas>
+	</div>
+	</section>
+	</div>`;
+	$('#content > section > section').append(panel);
+	let char = new Chart(chartId, {
+		type: 'bar',
+		data: {
+			labels: MONTH_NAMES_ABBREV,
+			datasets: [{
+				label: CURRENT_YEAR + ' Revenue',
+				data: script[CURRENT_YEAR].monthly,
+				backgroundColor: 'rgba(54, 162, 235, 0.2)',
+				borderColor: 'rgba(54, 162, 235, 1)',
+				borderWidth: 1
+			},
+			{
+				label: (CURRENT_YEAR - 1) + ' Revenue',
+				data: script[CURRENT_YEAR - 1].monthly,
+				backgroundColor: 'rgba(255, 159, 64, 0.2)',
+				borderColor: 'rgba(255, 159, 64, 1)',
+				borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero:true
+					}
+				}]
+			}
+		}
+	});
 }
 
 function getPreviousMonth(current, amount) {
