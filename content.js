@@ -22,7 +22,7 @@ const PANELS_HTML = `
 </div>
 <div class="col-lg-4">
 <section id="curr-year" class="panel panel-default">
-<header class="panel-heading"></header>
+<header class="panel-heading">${CURRENT_YEAR} Revenue</header>
 <div class="panel-body">
 <p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="curr-year">0</span></b></span></p>
 </div>
@@ -30,7 +30,7 @@ const PANELS_HTML = `
 </div>
 <div class="col-lg-4">
 <section id="prev-year" class="panel panel-default">
-<header class="panel-heading"></header>
+<header class="panel-heading">${CURRENT_YEAR - 1} Revenue</header>
 <div class="panel-body">
 <p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="prev-year">0</span></b></span></p>
 </div>
@@ -38,7 +38,7 @@ const PANELS_HTML = `
 </div>
 <div class="col-lg-4">
 <section id="curr-month" class="panel panel-default">
-<header class="panel-heading"></header>
+<header class="panel-heading">${MONTH_NAMES[CURRENT_MONTH] + ' ' + CURRENT_YEAR} Revenue</header>
 <div class="panel-body">
 <p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="curr-month">0</span></b></span></p>
 </div>
@@ -46,7 +46,7 @@ const PANELS_HTML = `
 </div>
 <div class="col-lg-4">
 <section id="prev-month" class="panel panel-default">
-<header class="panel-heading"></header>
+<header class="panel-heading">${MONTH_NAMES[getPreviousMonth(CURRENT_MONTH, 1)] + ' ' + CURRENT_YEAR} Revenue</header>
 <div class="panel-body">
 <p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="prev-month">0</span></b></span></p>
 </div>
@@ -54,7 +54,7 @@ const PANELS_HTML = `
 </div>
 <div class="col-lg-4">
 <section id="prev-prev-month" class="panel panel-default">
-<header class="panel-heading"></header>
+<header class="panel-heading">${MONTH_NAMES[getPreviousMonth(CURRENT_MONTH, 2)] + ' ' + CURRENT_YEAR} Revenue</header>
 <div class="panel-body">
 <p style="padding-bottom: 15px;"><span class="col-lg-6"><b>Overall</b></span><span class="col-lg-6"><b>$<span data-overall="prev-prev-month">0</span></b></span></p>
 </div>
@@ -68,11 +68,6 @@ $('nav.nav-primary > ul > li:nth-child(3) > ul').append(NAV_LIST_ITEM_HTML);
 $('#premium-statistics').click(function() {
 	$('#content > section > header > p').html('<i class="fa fa-code"></i> Scripter Panel | Premium Statistics');
 	$('#content > section > section').html(PANELS_HTML);
-	$('#curr-month > header').text(MONTH_NAMES[CURRENT_MONTH] + ' ' + CURRENT_YEAR + ' Revenue');
-	$('#prev-month > header').text(MONTH_NAMES[getPreviousMonth(CURRENT_MONTH, 1)] + ' ' + CURRENT_YEAR + ' Revenue');
-	$('#prev-prev-month > header').text(MONTH_NAMES[getPreviousMonth(CURRENT_MONTH, 2)] + ' ' + CURRENT_YEAR + ' Revenue');
-	$('#curr-year > header').text(CURRENT_YEAR + ' Revenue');
-	$('#prev-year > header').text((CURRENT_YEAR - 1) + ' Revenue');
 	getScripts();
 });
 
