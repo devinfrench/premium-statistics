@@ -155,7 +155,7 @@ function appendRevenue(name, logs) {
 }
 
 function appendChart(script) {
-	let chartId = script.name.replace(' ', '') + 'Chart';
+	let chartId = script.name + ' Chart';
 	let panel = `<div class="col-lg-6">
 	<section class="panel panel-default">
 	<header class="panel-heading">` + script.name + `</header>
