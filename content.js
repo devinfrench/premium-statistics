@@ -63,7 +63,7 @@ const PANELS_HTML = `
 </div>
 `;
 
-$('#nav > section > section > div > div.slim-scroll > nav > ul > li:nth-child(3) > ul').append(NAV_LIST_ITEM_HTML);
+$('nav.nav-primary > ul > li:nth-child(3) > ul').append(NAV_LIST_ITEM_HTML);
 
 $('#premium-statistics').click(function() {
 	$('#content > section > header > p').html('<i class="fa fa-code"></i> Scripter Panel | Premium Statistics');
