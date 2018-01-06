@@ -1,7 +1,7 @@
 {
   "name": "TRiBot Premium Statistics",
   "description": "Adds a new tab to the TRiBot repoistory that displays revenue information about public premium scripts.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "manifest_version": 2,
   "content_scripts": [ {
     "js": [ "jquery-3.2.1.min.js", "Chart.min.js", "content.js" ],
