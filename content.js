@@ -5,6 +5,7 @@ const CURRENT_MONTH = TODAY.getMonth();
 const CURRENT_YEAR = TODAY.getFullYear();
 const PREVIOUS_MONTHS = getPreviousMonths();
 const PREVIOUS_MONTH_YEARS = getPreviousMonthYears();
+const COLORS = ['#33a02c', '#1f78b4', '#e31a1c', '#ff7f00', '#6a3d9a', '#a6cee3', '#fb9a99', '#fdbf6f', '#cab2d6', '#b2df8a', '#ffff99'];
 const NAV_LIST_ITEM_HTML = `
 <li>
 <a id="premium-statistics" href="javascript:void(0)">
@@ -63,13 +64,40 @@ const PANELS_HTML = `
 </section>
 </div>
 </div>
+<div class="row">
+<div class="col-lg-6">
+<section id="twelve-months-revenue" class="panel panel-default">
+<header class="panel-heading">${MONTH_NAMES[CURRENT_MONTH] + ' ' + (CURRENT_YEAR - 1) + " - " + MONTH_NAMES[PREVIOUS_MONTHS[0]] + ' ' + PREVIOUS_MONTH_YEARS[0]} Total Revenue</header>
+<div class="panel-body">
+<canvas id="twelve-months-revenue-chart"></canvas>
+</div>
+</section>
+</div>
+<div class="col-lg-6">
+<section id="twelve-months-sales" class="panel panel-default">
+<header class="panel-heading">${MONTH_NAMES[CURRENT_MONTH] + ' ' + (CURRENT_YEAR - 1) + " - " + MONTH_NAMES[PREVIOUS_MONTHS[0]] + ' ' + PREVIOUS_MONTH_YEARS[0]} Sales</header>
+<div class="panel-body">
+<canvas id="twelve-months-sales-chart"></canvas>
+</div>
+</section>
+</div>
+</div>
 `;
+
+let revenueTwelveMonths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+let salesTwelveMonths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+let pastTwelveMonthsNamesAbr = getPreviousMonthNames();
+let twelveMonthsRevenueChart;
+let twelveMonthsSalesChart;
+let colorCount = 1;
 
 $('nav.nav-primary > ul > li:nth-child(3) > ul').append(NAV_LIST_ITEM_HTML);
 
 $('#premium-statistics').click(function() {
 	$('#content > section > header > p').html('<i class="fa fa-code"></i> Scripter Panel | Premium Statistics');
 	$('#content > section > section').html(PANELS_HTML);
+	twelveMonthsRevenueChart = appendTwelveMonthsRevenueChart();
+	twelveMonthsSalesChart = appendTwelveMonthsSalesChart();
 	getScripts();
 });
 
@@ -106,7 +134,8 @@ function appendRevenue(name, logs) {
 	for (let i = CURRENT_YEAR - 1; i <= CURRENT_YEAR ; i++) {
 		script[i] = {
 			total: 0,
-			monthly: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			monthly: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			sales: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		}
 	}
 
@@ -119,6 +148,7 @@ function appendRevenue(name, logs) {
 					for (let j = 0; j < MONTH_NAMES_ABBREV.length; j++) {
 						if (value.time.includes(MONTH_NAMES_ABBREV[j] + ' ' + i)) {
 							script[i].monthly[j] += amount;
+							script[i].sales[j] += 1;
 							script[i].total += amount;
 						}
 					}
@@ -132,6 +162,40 @@ function appendRevenue(name, logs) {
 				script[i].monthly[j] = Number(script[i].monthly[j].toFixed(2));
 			}
 		}
+
+		let scriptRevenueTwelveMonths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		let scriptSalesTwelveMonths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		for (let i = 0; i <= 11; i++) {
+			let revenue = script[CURRENT_YEAR - 1].monthly[PREVIOUS_MONTHS[i]];
+			revenueTwelveMonths[PREVIOUS_MONTHS[i]] += revenue;
+			revenueTwelveMonths[PREVIOUS_MONTHS[i]] = Number(revenueTwelveMonths[PREVIOUS_MONTHS[i]].toFixed(2));
+			scriptRevenueTwelveMonths[i] = Number(revenue.toFixed(2));
+			scriptSalesTwelveMonths[i] = script[CURRENT_YEAR - 1].sales[PREVIOUS_MONTHS[i]];
+		}
+
+		let color = COLORS[colorCount];
+		colorCount++;
+		let scriptRevenueDataset = {
+			label: name + ' Revenue',
+			data: scriptRevenueTwelveMonths.reverse(),
+			fill: -1,
+			borderColor: color,
+			backgroundColor: color,
+			borderWidth: 2,
+			pointBackgroundColor: color,
+			lineTension: 0
+		}
+		let scriptSalesDataset = {
+			label: name + ' Sales',
+			data: scriptSalesTwelveMonths.reverse(),
+			borderColor: color,
+			backgroundColor: color,
+			borderWidth: 1,
+		}
+		twelveMonthsRevenueChart.data.datasets.push(scriptRevenueDataset);
+		twelveMonthsRevenueChart.update();
+		twelveMonthsSalesChart.data.datasets.push(scriptSalesDataset);
+		twelveMonthsSalesChart.update();
 
 		let currMonthAvg = script[CURRENT_YEAR].monthly[CURRENT_MONTH] / TODAY.getDate();
 		let prevMonthAvg = script[PREVIOUS_MONTH_YEARS[0]].monthly[PREVIOUS_MONTHS[0]] / getDaysInMonth(PREVIOUS_MONTHS[0], PREVIOUS_MONTH_YEARS[0]);
@@ -166,22 +230,22 @@ function appendChart(script) {
 	</section>
 	</div>`;
 	$('#content > section > section').append(panel);
-	let char = new Chart(chartId, {
+	let chart = new Chart(chartId, {
 		type: 'bar',
 		data: {
 			labels: MONTH_NAMES_ABBREV,
 			datasets: [{
 				label: CURRENT_YEAR + ' Revenue',
 				data: script[CURRENT_YEAR].monthly,
-				backgroundColor: 'rgba(54, 162, 235, 0.2)',
-				borderColor: 'rgba(54, 162, 235, 1)',
+				backgroundColor: COLORS[1],
+				borderColor: COLORS[1],
 				borderWidth: 1
 			},
 			{
 				label: (CURRENT_YEAR - 1) + ' Revenue',
 				data: script[CURRENT_YEAR - 1].monthly,
-				backgroundColor: 'rgba(255, 159, 64, 0.2)',
-				borderColor: 'rgba(255, 159, 64, 1)',
+				backgroundColor: COLORS[3],
+				borderColor: COLORS[3],
 				borderWidth: 1
 			}]
 		},
@@ -195,6 +259,55 @@ function appendChart(script) {
 			}
 		}
 	});
+}
+
+function appendTwelveMonthsRevenueChart() {
+	let chart = new Chart("twelve-months-revenue-chart", {
+		type: 'line',
+		data: {
+			labels: pastTwelveMonthsNamesAbr,
+			datasets: [{
+				type: 'line',
+				label: 'Total Revenue',
+				data: revenueTwelveMonths,
+				fill: -1,
+				borderColor: COLORS[0],
+				backgroundColor: COLORS[0],
+				borderWidth: 2,
+				pointBackgroundColor: COLORS[0],
+				lineTension: 0
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero:true
+					}
+				}]
+			}
+		}
+	});
+	return chart;
+}
+
+function appendTwelveMonthsSalesChart() {
+	let chart = new Chart("twelve-months-sales-chart", {
+		type: 'bar',
+		data: {
+			labels: pastTwelveMonthsNamesAbr
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero:true
+					}
+				}]
+			}
+		}
+	});
+	return chart;
 }
 
 function getPreviousMonth(current, amount) {
@@ -216,17 +329,26 @@ function getPercentChange(curr, prev) {
 }
 
 function getPreviousMonths() {
-	months = [0, 0, 0];
-	for (let i = 1; i <= 3; i++) {
-		months[i - 1] = getPreviousMonth(CURRENT_MONTH, i);
+	months = [];
+	for (let i = 1; i <= 12; i++) {
+		months.push(getPreviousMonth(CURRENT_MONTH, i));
 	}
 	return months;
 }
 
 function getPreviousMonthYears() {
-	years = [0, 0, 0];
-	for (let i = 1; i <= 3; i++) {
-		years[i - 1] = getPreviousMonthYear(CURRENT_MONTH, PREVIOUS_MONTHS[i - 1]);
+	years = [];
+	for (let i = 1; i <= 12; i++) {
+		years.push(getPreviousMonthYear(CURRENT_MONTH, PREVIOUS_MONTHS[i - 1]));
 	}
 	return years;
+}
+
+function getPreviousMonthNames() {
+	months = [];
+	for (let i = 0; i < 12; i++) {
+		months.push(MONTH_NAMES_ABBREV[PREVIOUS_MONTHS[i]]);
+	}
+	months.reverse();
+	return months;
 }
