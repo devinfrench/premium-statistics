@@ -165,19 +165,21 @@ function appendRevenue(name, logs) {
 
 		let scriptRevenueTwelveMonths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		let scriptSalesTwelveMonths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		for (let i = 0; i <= 11; i++) {
-			let revenue = script[CURRENT_YEAR - 1].monthly[PREVIOUS_MONTHS[i]];
-			revenueTwelveMonths[PREVIOUS_MONTHS[i]] += revenue;
-			revenueTwelveMonths[PREVIOUS_MONTHS[i]] = Number(revenueTwelveMonths[PREVIOUS_MONTHS[i]].toFixed(2));
+		for (let i = 0; i < 12; i++) {
+			let month = (i + 1) % 12;
+			let year = month < CURRENT_MONTH ? CURRENT_YEAR : CURRENT_YEAR - 1;
+			let revenue = script[year].monthly[month];
+			revenueTwelveMonths[i] += revenue;
+			revenueTwelveMonths[i] = Number(revenueTwelveMonths[i].toFixed(2));
 			scriptRevenueTwelveMonths[i] = Number(revenue.toFixed(2));
-			scriptSalesTwelveMonths[i] = script[CURRENT_YEAR - 1].sales[PREVIOUS_MONTHS[i]];
+			scriptSalesTwelveMonths[i] = script[year].sales[month];
 		}
 
 		let color = COLORS[colorCount];
 		colorCount++;
 		let scriptRevenueDataset = {
 			label: name + ' Revenue',
-			data: scriptRevenueTwelveMonths.reverse(),
+			data: scriptRevenueTwelveMonths,
 			fill: -1,
 			borderColor: color,
 			backgroundColor: color,
@@ -187,7 +189,7 @@ function appendRevenue(name, logs) {
 		}
 		let scriptSalesDataset = {
 			label: name + ' Sales',
-			data: scriptSalesTwelveMonths.reverse(),
+			data: scriptSalesTwelveMonths,
 			borderColor: color,
 			backgroundColor: color,
 			borderWidth: 1,
