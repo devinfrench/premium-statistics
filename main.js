@@ -1,13 +1,10 @@
 (function () {
 
-  const COLORS = [
-    "#33a02c", "#1f78b4", "#e31a1c", "#ff7f00", "#6a3d9a", "#a6cee3",
-    "#fb9a99", "#fdbf6f", "#cab2d6", "#b2df8a", "#ffff99"
-  ];
-  let colorCount;
-  let pastYearRevenueChart;
-  let pastYearSalesChart;
-  let pastYearRevenueOverall;
+  let pastYearCharts = {
+    colorCount: 1,
+    pastYearRevenueChart: undefined,
+    pastYearSalesChart: undefined
+  }
   let calender;
 
   init();
@@ -27,7 +24,7 @@
   function render() {
     calender = new Calender();
     let $content = $("#content");
-    $content.load(chrome.runtime.getURL("templates/panels.html"), () => {
+    $content.load(chrome.runtime.getURL("templates/panels.html"), function () {
       let $statsModule = $("#statistics-module");
       let template = $statsModule.find("#statistics-template").html();
       let view = {
@@ -53,22 +50,21 @@
   }
 
   function renderPastYearCharts() {
-    colorCount = 1;
-    pastYearRevenueOverall = new Array(12).fill(0);
+    pastYearCharts.colorCount = 1;
     let pastYearMonthNamesAbbrev = calender.getPreviousTwelveMonths().monthNamesAbbrev;
-    pastYearRevenueChart = new Chart("twelve-months-revenue-chart", {
+    pastYearCharts.pastYearRevenueChart = new Chart("twelve-months-revenue-chart", {
       type: "line",
       data: {
         labels: pastYearMonthNamesAbbrev,
         datasets: [{
           type: "line",
           label: "Overall",
-          data: pastYearRevenueOverall,
+          data: new Array(12).fill(0),
           fill: -1,
-          borderColor: COLORS[0],
-          backgroundColor: COLORS[0],
+          borderColor: "#33a02c",
+          backgroundColor: "#33a02c",
           borderWidth: 2,
-          pointBackgroundColor: COLORS[0],
+          pointBackgroundColor: "#33a02c",
           lineTension: 0
         }]
       },
@@ -82,7 +78,7 @@
         }
       }
     });
-    pastYearSalesChart = new Chart("twelve-months-sales-chart", {
+    pastYearCharts.pastYearSalesChart = new Chart("twelve-months-sales-chart", {
       type: "bar",
       data: {
         labels: pastYearMonthNamesAbbrev
@@ -109,46 +105,12 @@
                 let logs = $.parseJSON(data).aaData;
                 if (logs.length > 2) {
                   let purchaseLog = new PurchaseLog(value.name, logs, calender);
-                  purchaseLog.render();
-                  renderTwelveMonthChart(purchaseLog);
+                  purchaseLog.render(pastYearCharts);
                 }
               });
           }
         });
       });
-  }
-
-  function renderTwelveMonthChart(purchaseLog) {
-    let color = COLORS[colorCount++];
-    let pastYearRevenue = purchaseLog.getPastYearRevenue();
-    let pastYearSales = purchaseLog.getPastYearSales();
-    let revenueDataset = {
-      label: purchaseLog.name,
-      data: pastYearRevenue,
-      fill: -1,
-      borderColor: color,
-      backgroundColor: color,
-      borderWidth: 2,
-      pointBackgroundColor: color,
-      lineTension: 0
-    }
-    let salesDataset = {
-      label: purchaseLog.name,
-      data: pastYearSales,
-      borderColor: color,
-      backgroundColor: color,
-      borderWidth: 1,
-    }
-    pastYearRevenueChart.data.datasets.push(revenueDataset);
-    pastYearSalesChart.data.datasets.push(salesDataset);
-    for (let i = 0; i < 12; i++) {
-      if (pastYearRevenue[i]) {
-        pastYearRevenueOverall[i] += pastYearRevenue[i];
-        pastYearRevenueOverall[i] = Math.round(pastYearRevenueOverall[i] * 100) / 100;
-      }
-    }
-    pastYearRevenueChart.update();
-    pastYearSalesChart.update();
   }
 
 })();

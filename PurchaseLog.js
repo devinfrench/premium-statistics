@@ -1,3 +1,8 @@
+const COLORS = [
+    "#33a02c", "#1f78b4", "#e31a1c", "#ff7f00", "#6a3d9a", "#a6cee3",
+    "#fb9a99", "#fdbf6f", "#cab2d6", "#b2df8a", "#ffff99"
+  ];
+
 class PurchaseLog {
 
     constructor(name, data, calender) {
@@ -46,7 +51,7 @@ class PurchaseLog {
         self.total = Math.round(self.total * 100) / 100;
     }
 
-    getPastYearRevenue() {
+    _getPastYearRevenue() {
         let yearRevenue = new Array(12);
         for (let i = 11; i >= 0; i--) {
             let year = this.calender.getYear() - this.previousTwelveMonths.year[i];
@@ -59,7 +64,7 @@ class PurchaseLog {
         return yearRevenue;
     }
 
-    getPastYearSales() {
+    _getPastYearSales() {
         let yearSales = new Array(12);
         for (let i = 11; i >= 0; i--) {
             let year = this.calender.getYear() - this.previousTwelveMonths.year[i];
@@ -72,9 +77,10 @@ class PurchaseLog {
         return yearSales;
     }
 
-    render() {
+    render(pastYearCharts) {
         this._renderTables();
         this._renderChart();
+        this._renderPastYearChart(pastYearCharts);
     }
 
     _renderTables() {
@@ -231,5 +237,39 @@ class PurchaseLog {
             }
         });
     }
+
+    _renderPastYearChart(pastYearCharts) {
+        let color = COLORS[pastYearCharts.colorCount++];
+        let pastYearRevenue = this._getPastYearRevenue();
+        let pastYearSales = this._getPastYearSales();
+        let revenueDataset = {
+          label: this.name,
+          data: pastYearRevenue,
+          fill: -1,
+          borderColor: color,
+          backgroundColor: color,
+          borderWidth: 2,
+          pointBackgroundColor: color,
+          lineTension: 0
+        }
+        let salesDataset = {
+          label: this.name,
+          data: pastYearSales,
+          borderColor: color,
+          backgroundColor: color,
+          borderWidth: 1,
+        }
+        pastYearCharts.pastYearRevenueChart.data.datasets.push(revenueDataset);
+        pastYearCharts.pastYearSalesChart.data.datasets.push(salesDataset);
+        let pastYearRevenueOverall = pastYearCharts.pastYearRevenueChart.data.datasets[0].data;
+        for (let i = 0; i < 12; i++) {
+          if (pastYearRevenue[i]) {
+            pastYearRevenueOverall[i] += pastYearRevenue[i];
+            pastYearRevenueOverall[i] = Math.round(pastYearRevenueOverall[i] * 100) / 100;
+          }
+        }
+        pastYearCharts.pastYearRevenueChart.update();
+        pastYearCharts.pastYearSalesChart.update();
+      }
 
 }
