@@ -1,0 +1,135 @@
+<section class="vbox">
+    <header class="header bg-white b-b b-light">
+        <p><i class="fa fa-code"></i> Scripter Panel | Premium Statistics</p>
+    </header>
+    <section class="scrollable wrapper">
+        <div class="row">
+            <section id="statistics-module" class="scrollable padder">
+                <script id="statistics-template" type="text/template">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <section id="total" class="panel panel-default">
+                                <header class="panel-heading">Total Revenue</header>
+                                <div class="panel-body">
+                                    <div class="row" style="padding-bottom: 15px;">
+                                        <span class="col-lg-6">
+                                            <b>Overall</b>
+                                        </span>
+                                        <span class="col-lg-6">
+                                            <b>$<span data-overall="total">0</span></b>
+                                        </span>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="col-lg-4">
+                            <section id="current-year" class="panel panel-default">
+                                <header class="panel-heading">{{ currentYear }} Revenue</header>
+                                <div class="panel-body">
+                                    <div class="row" style="padding-bottom: 15px;">
+                                        <span class="col-lg-6">
+                                            <b>Overall</b>
+                                        </span>
+                                        <span class="col-lg-6">
+                                            <b>$<span data-overall="current-year">0</span></b>
+                                        </span>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="col-lg-4">
+                            <section id="previous-year" class="panel panel-default">
+                                <header class="panel-heading">{{ #previousYear }} 12 {{ /previousYear }} Revenue</header>
+                                <div class="panel-body">
+                                    <div class="row" style="padding-bottom: 15px;">
+                                        <span class="col-lg-6">
+                                            <b>Overall</b>
+                                        </span>
+                                        <span class="col-lg-6">
+                                            <b>$<span data-overall="previous-year">0</span></b>
+                                        </span>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <section id="current-month" class="panel panel-default">
+                                <header class="panel-heading">{{ currentMonth }} {{ currentYear }} Revenue</header>
+                                <div class="panel-body">
+                                    <div class="row" style="padding-bottom: 15px;">
+                                        <span class="col-lg-6">
+                                            <b>Overall</b>
+                                        </span>
+                                        <span class="col-lg-6">
+                                            <b>$<span data-overall="current-month">0</span></b>
+                                        </span>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="col-lg-4">
+                            <section id="previous-month" class="panel panel-default">
+                                <header class="panel-heading">{{ #previousMonth }} 1 {{ /previousMonth }} {{ #previousYear }} 1 {{ /previousYear }} Revenue</header>
+                                <div class="panel-body">
+                                    <div class="row" style="padding-bottom: 15px;">
+                                        <span class="col-lg-6">
+                                            <b>Overall</b>
+                                        </span>
+                                        <span class="col-lg-6">
+                                            <b>$<span data-overall="previous-month">0</span></b>
+                                        </span>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="col-lg-4">
+                            <section id="previous-month-2" class="panel panel-default">
+                                <header class="panel-heading">{{ #previousMonth }} 2 {{ /previousMonth }} {{ #previousYear }} 2 {{ /previousYear }} Revenue</header>
+                                <div class="panel-body">
+                                    <div class="row" style="padding-bottom: 15px;">
+                                        <span class="col-lg-6">
+                                            <b>Overall</b>
+                                        </span>
+                                        <span class="col-lg-6">
+                                            <b>$<span data-overall="previous-month-2">0</span></b>
+                                        </span>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <section class="panel panel-default">
+                                <header class="panel-heading">
+                                    {{ #previousMonth }} 12 {{ /previousMonth }} {{ #previousYear }} 12 {{ /previousYear }} - {{ #previousMonth }} 1 {{ /previousMonth}}
+                                    {{ #previousYear }} 1 {{ /previousYear }} Revenue
+                                </header>
+                                <div class="panel-body">
+                                    <canvas id="twelve-months-revenue-chart"></canvas>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="col-lg-6">
+                            <section class="panel panel-default">
+                                <header class="panel-heading">
+                                    {{ #previousMonth }} 12 {{ /previousMonth }} {{ #previousYear }} 12 {{ /previousYear }} - {{ #previousMonth }} 1 {{ /previousMonth}}
+                                    {{ #previousYear }} 1 {{ /previousYear }} Sales
+                                </header>
+                                <div class="panel-body">
+                                    <canvas id="twelve-months-sales-chart"></canvas>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div id="script-tables-module" class="row">
+                    </div>
+                    <div id="script-charts-module" class="row">
+                    </div>
+                </script>
+            </section>
+        </div>
+    </section>
+</section>
