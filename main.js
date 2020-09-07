@@ -96,11 +96,11 @@
   }
 
   function renderPurchaseLogs() {
-    $.get("https://tribot.org/repository/data/scripter_panel/published_scripts")
+    $.get("https://repo.tribot.org/data/scripter_panel/published_scripts")
       .done(function (data) {
         $.each($.parseJSON(data).aaData, function (key, value) {
           if (value.actions.includes("Purchase Logs")) {
-            $.get(`https://tribot.org/repository/index.php/data/scripter_panel/purchase_logs/${value.id}/`)
+            $.get(`https://repo.tribot.org/index.php/data/scripter_panel/purchase_logs/${value.id}/`)
               .done(function (data) {
                 let logs = $.parseJSON(data).aaData;
                 if (logs.length > 2) {
